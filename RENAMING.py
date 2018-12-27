@@ -10,6 +10,7 @@
 TODO Total files renamed
 TODO Process bar
 TODO Automatically find OS encoding(language) and change software language accordingly
+TODO Renaming folders
 """
 
 import sys
@@ -34,7 +35,7 @@ class MainApplication(gui.MainWindow):
     def __init__(self, parent=None):
         super(MainApplication, self).__init__(parent)
 
-        self.ui.launch.clicked.connect(self.rename)
+        self.ui.launch.clicked.connect(self.rename_files)
         self.ui.pick_folder.clicked.connect(self.folder_pick)
 
         """Binds"""
@@ -45,27 +46,24 @@ class MainApplication(gui.MainWindow):
         """Vars"""
         self.name = 0
         self.timer = 0
-        self.path = ''
+        # self.folder_path = ''
         self.folder = ''
-        self.extentions_dict = {}
-
-    def printing(self):
-        print('DONE!')
+        self.extensions_dict = {}
 
     def unique_file_name(self, extension):
         try:
-            if self.extentions_dict[extension] != '':
-                self.extentions_dict[extension] += 1
+            if self.extensions_dict[extension] != '':
+                self.extensions_dict[extension] += 1
         except KeyError:
-            self.extentions_dict[extension] = 1
+            self.extensions_dict[extension] = 1
         finally:
-            self.name = self.extentions_dict[extension]
+            self.name = self.extensions_dict[extension]
             return self.name
 
     def folder_pick(self):
         self.folder = str(QFileDialog.getExistingDirectory(self.ui, "Select Directory"))
         if self.folder:
-            self.ui.path_label.setText(self.folder)
+            self.ui.show_path.setText(self.folder)
 
     def find_extension(self, file):
         return str(Path(file).suffix)
@@ -73,18 +71,8 @@ class MainApplication(gui.MainWindow):
         # filename, extension = os.path.splitext(file)
         # return extension
 
-    # def find_extention(self, file):
-        # length = 0
-        # file_length = len(file) - 1
-        # while length <= file_length:
-        #     if file[length] == '.':
-        #         letter_position = length
-        #     length += 1
-        # extention = file[letter_position:]
-        # return extention
-
-    def rename(self):
-        self.extentions_dict = {}
+    def rename_files(self):
+        # self.extensions_dict = {}
 
         file_list = []
         for file in os.walk(self.folder):
@@ -92,15 +80,12 @@ class MainApplication(gui.MainWindow):
 
         for address, dirs, files in file_list:
             for file in files:
-                print('file:', file)
                 extension = self.find_extension(file)
-                print('extension', extension)
-                self.path = address + '/'
-                obj = self.path + file
-                print(obj)
+                folder_path = address + '/'
+                obj = folder_path + file
 
                 self.unique_file_name(extension)
-                os.rename(obj, self.path + str(self.name) + extension)
+                os.rename(obj, folder_path + str(self.name) + extension)
                 time.sleep(self.timer)
 
     # def rename(self):
