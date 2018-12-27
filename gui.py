@@ -4,7 +4,7 @@
 import ctypes
 
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QMessageBox, QFileDialog, QHBoxLayout, \
-    QFormLayout, QWidget, QScrollArea, QVBoxLayout, QPushButton, QLabel
+    QFormLayout, QWidget, QScrollArea, QVBoxLayout, QPushButton, QLabel, QLineEdit, QRadioButton, QButtonGroup
 from PyQt5.QtGui import QIcon, QImage, QPalette, QBrush, QFont
 from PyQt5.QtCore import QSize, Qt, QRect
 
@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent)
         self.setWindowTitle("Main window")
         self.setWindowIcon(QIcon('logo.png'))
-        self.width = 850
+        self.width = 400
         self.height = 470
         MainWindow.resize(self, self.width, self.height)
 
@@ -67,16 +67,16 @@ class MainWindow(QMainWindow):
         self.file_name_rb.configure(text=self.eng_language_list[9])
 
     def rus_language(self):
-            self.launch.configure(text=self.eng_rus_dictionary[self.eng_language_list[0]])
-            self.pick_folder.configure(text=self.eng_rus_dictionary[self.eng_language_list[1]])
-            self.time_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[2]])
-            self.path_hint_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[3]])
-            self.pass1_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[4]])
-            self.random_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[5]])
-            self.not_random_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[6]])
-            self.pass2_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[7]])
-            self.file_type_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[8]])
-            self.file_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[9]])
+        self.launch.configure(text=self.eng_rus_dictionary[self.eng_language_list[0]])
+        self.pick_folder.configure(text=self.eng_rus_dictionary[self.eng_language_list[1]])
+        self.time_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[2]])
+        self.path_hint_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[3]])
+        self.pass1_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[4]])
+        self.random_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[5]])
+        self.not_random_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[6]])
+        self.pass2_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[7]])
+        self.file_type_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[8]])
+        self.file_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[9]])
 
 
 class UserInterface(QWidget):
@@ -94,102 +94,101 @@ class UserInterface(QWidget):
         """Buttons"""
         self.launch = PushButton('Launch', 'Click to launch')
         self.pick_folder = PushButton('Pick Folder')
-        # self.launch = QtWidgets.QPushButton(self.centralWidget)
-        # self.launch.setGeometry(QtCore.QRect(90, 10, 70, 40))
-        # self.launch.setToolTip("Top left corner of the rectangle.")
-               
-        # self.pick_folder = tk.Button(self.frame, text="Choose the folder", width=15, height=1)
-        # self.pick_folder.pack()
-        # # self.Folder_Button.focus_set()
-        #
-        # self.time_label = tk.Label(self.frame, text='Time between changing the names', width=30)
-        # self.time_label.pack()
-        #
-        # self.wait_timer = tk.Entry(self.frame, width=3, text="")
-        # self.wait_timer.pack()
-        #
-        # self.path_hint_label = tk.Label(self.frame, text='Chosen path to the folder is: ', width=25, height=1)
-        # self.path_hint_label.pack()
-        #
-        # self.path_label = tk.Label(self.frame, width=50, height=3, fg="green")
-        # self.path_label.pack()
-        #
-        # self.pass1_label = tk.Label(self.frame, text='Choose a few naming options', width=50, height=2)
-        # self.pass1_label.pack()
-        #
-        # self.random_name_rb = tk.Radiobutton(self.frame, text='Random file name', variable=self.random_var, value=1)
-        # self.random_name_rb.pack()
-        #
-        # self.not_random_name_rb = tk.Radiobutton(self.frame, text='Not random file name', variable=self.random_var, value=2)
-        # self.not_random_name_rb.pack()
-        #
-        # self.pass2_label = tk.Label(self.frame, text='and those', width=15, height=2, font='sans 11')
-        # self.pass2_label.pack()
-        #
-        # self.file_type_rb = tk.Radiobutton(self.frame, text='Depends on file type', variable=self.rb_var, value=1)
-        # self.file_type_rb.pack()
-        #
-        # self.file_name_rb = tk.Radiobutton(self.frame, text='Depends on initial file name', variable=self.rb_var, value=2)
-        # self.file_name_rb.pack()
+        self.timeout = Label('Time between changing the names')
+        self.timeout_enter = LineEdit()
+        self.path_hint = Label('Chosen path to the folder is: ')
+        self.show_path = Label()  # Green
+        self.choice_1 = Label('Choose a few naming options')
+
+        """RadioButtons first group"""
+        self.rnd_name = RadioButton('Random file name')
+        self.not_rnd_name = RadioButton('Not random file name')
+        self.not_rnd_name.setChecked(True)
+
+        self.button_group_1 = QButtonGroup()
+        self.button_group_1.addButton(self.rnd_name)
+        self.button_group_1.addButton(self.not_rnd_name)
+
+        self.choice_2 = Label('and those')
+
+        """RadioButtons second group"""
+        self.file_type = RadioButton('Depends on file type')
+        self.file_type.setChecked(True)
+        self.file_name = RadioButton('Depends on initial file name')
+
+        self.button_group_2 = QButtonGroup()
+        self.button_group_2.addButton(self.file_type)
+        self.button_group_2.addButton(self.file_name)
 
     def __layout(self):
         """
         Arranging UI elements
         """
 
-        layout = QHBoxLayout()
-        layout.addWidget(self.launch)
-        layout.addWidget(self.pick_folder)
+        layout_v = QVBoxLayout()
+        layout_v.setContentsMargins(5, 5, 5, 5)
+        layout_v.addWidget(self.pick_folder, 1, Qt.AlignTop)
+        layout_v.addWidget(self.timeout, 1, Qt.AlignTop)
+        layout_v.addWidget(self.timeout_enter, 1, Qt.AlignTop)
+        layout_v.addWidget(self.path_hint, 1, Qt.AlignCenter)
+        layout_v.addWidget(self.show_path, 1, Qt.AlignCenter)
+        layout_v.addWidget(self.choice_1, 1, Qt.AlignTop)
+        layout_v.addWidget(self.rnd_name, 1, Qt.AlignTop)
+        layout_v.addWidget(self.not_rnd_name, 1, Qt.AlignTop)
+        layout_v.addWidget(self.choice_2, 1, Qt.AlignTop)
+        layout_v.addWidget(self.file_type, 1, Qt.AlignTop)
+        layout_v.addWidget(self.file_name, 1, Qt.AlignTop)
+        layout_v.addWidget(self.launch, 2, Qt.AlignBottom)
 
-        self.setLayout(layout)
+        layout_h = QHBoxLayout()
+        layout_h.setContentsMargins(5, 5, 5, 5)
+        layout_h.addLayout(layout_v)
+
+        self.setLayout(layout_h)
 
 
 class PushButton(QPushButton):
-    def __init__(self, text, tooltip=None):
+    def __init__(self, text='', tooltip=''):
         QPushButton.__init__(self)
 
         self.tooltip = str(tooltip)
-        self.text = text
+        self.text = str(text)
 
-        self.setText(text)
+        self.setText(self.text)
         self.setToolTip(self.tooltip)
-
-# class PushButton(QPushButton):
-#     def __init__(self, widget, pos_x, pos_y, width, height, text, tooltip=None):
-#         QPushButton.__init__(self, widget)
-#
-#         self.widget = widget
-#         self.pos_x = pos_x
-#         self.pos_y = pos_y
-#         self.width = width
-#         self.height = height
-#         self.tooltip = str(tooltip)
-#         self.text = text
-#
-#         self.setText(text)
-#         self.setGeometry(QRect(self.pos_x, self.pos_y, self.width, self.height))
-#         self.setToolTip(self.tooltip)
 
 
 class Label(QLabel):
+    def __init__(self, text='', tooltip=''):
+        QLabel.__init__(self)
 
-    def __init__(self, widget, pos_x, pos_y, width, height, text, tooltip=None):
-        Label.__init__(self, widget)
-        self.widget = widget
-        self.pos_x = pos_x
-        self.pos_y = pos_y
-        self.width = width
-        self.height = height
         self.tooltip = str(tooltip)
-        self.text = text
+        self.text = str(text)
 
-        self.statistics_label = QLabel("Statistics", self.centralWidget)
-        self.statistics_label.setGeometry(QRect(730, 10, 100, 20))
-        self.statistics_label.setObjectName("statistics_label")
-        self.statistics_label.setStyleSheet("color:rgb(0, 0, 0, 255)")
-        self.statistics_label.setFont(QFont("Times", 12))
+        self.setText(self.text)
+        self.setToolTip(self.tooltip)
 
 
+class LineEdit(QLineEdit):
+    def __init__(self, text='', tooltip=''):
+        QLineEdit.__init__(self)
+
+        self.tooltip = str(tooltip)
+        self.text = str(text)
+
+        self.setText(self.text)
+        self.setToolTip(self.tooltip)
+
+
+class RadioButton(QRadioButton):
+    def __init__(self, text=None, tooltip=None):
+        QRadioButton.__init__(self)
+
+        self.tooltip = str(tooltip)
+        self.text = str(text)
+
+        self.setText(self.text)
+        self.setToolTip(self.tooltip)
 
 #         '''Size of the MainWindow'''
 #         user32 = ctypes.windll.user32
