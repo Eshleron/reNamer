@@ -94,8 +94,6 @@ class UserInterface(QWidget):
         """Buttons"""
         self.launch = PushButton('Launch', 'Click to launch')
         self.pick_folder = PushButton('Pick Folder')
-        self.timeout = Label('Time between changing the names')
-        self.timeout_enter = LineEdit()
         self.path_hint = Label('Chosen path to the folder is: ')
         self.show_path = Label()  # Green
         self.choice_1 = Label('Choose a few naming options')
@@ -113,12 +111,17 @@ class UserInterface(QWidget):
 
         """RadioButtons second group"""
         self.file_type = RadioButton('Depends on file type')
-        self.file_type.setChecked(True)
-        self.file_name = RadioButton('Depends on initial file name')
+        self.file_init_name = RadioButton('Depends on initial file name')
+        self.file_set_name = RadioButton('Set file name')
 
         self.button_group_2 = QButtonGroup()
         self.button_group_2.addButton(self.file_type)
-        self.button_group_2.addButton(self.file_name)
+        self.button_group_2.addButton(self.file_init_name)
+        self.button_group_2.addButton(self.file_set_name)
+
+        self.set_basis = LineEdit(placeholder='Set basis')
+        self.set_start_value = LineEdit(placeholder='Set start value')
+        self.set_increment = LineEdit(placeholder='Set increment')
 
     def __layout(self):
         """
@@ -128,8 +131,6 @@ class UserInterface(QWidget):
         layout_v = QVBoxLayout()
         layout_v.setContentsMargins(5, 5, 5, 5)
         layout_v.addWidget(self.pick_folder, 1, Qt.AlignTop)
-        layout_v.addWidget(self.timeout, 1, Qt.AlignTop)
-        layout_v.addWidget(self.timeout_enter, 1, Qt.AlignTop)
         layout_v.addWidget(self.path_hint, 1, Qt.AlignCenter)
         layout_v.addWidget(self.show_path, 1, Qt.AlignCenter)
         layout_v.addWidget(self.choice_1, 1, Qt.AlignTop)
@@ -137,7 +138,11 @@ class UserInterface(QWidget):
         layout_v.addWidget(self.not_rnd_name, 1, Qt.AlignTop)
         layout_v.addWidget(self.choice_2, 1, Qt.AlignTop)
         layout_v.addWidget(self.file_type, 1, Qt.AlignTop)
-        layout_v.addWidget(self.file_name, 1, Qt.AlignTop)
+        layout_v.addWidget(self.file_init_name, 1, Qt.AlignTop)
+        layout_v.addWidget(self.file_set_name, 1, Qt.AlignTop)
+        layout_v.addWidget(self.set_basis, 1, Qt.AlignTop)
+        layout_v.addWidget(self.set_start_value, 1, Qt.AlignTop)
+        layout_v.addWidget(self.set_increment, 1, Qt.AlignTop)
         layout_v.addWidget(self.launch, 2, Qt.AlignBottom)
 
         layout_h = QHBoxLayout()
@@ -170,18 +175,18 @@ class Label(QLabel):
 
 
 class LineEdit(QLineEdit):
-    def __init__(self, text='', tooltip=''):
+    def __init__(self, tooltip='', placeholder=''):
         QLineEdit.__init__(self)
 
+        self.PlaceholderText = str(placeholder)
         self.tooltip = str(tooltip)
-        self.text = str(text)
 
-        self.setText(self.text)
         self.setToolTip(self.tooltip)
+        self.setPlaceholderText(self.PlaceholderText)
 
 
 class RadioButton(QRadioButton):
-    def __init__(self, text=None, tooltip=None):
+    def __init__(self, text='', tooltip=''):
         QRadioButton.__init__(self)
 
         self.tooltip = str(tooltip)

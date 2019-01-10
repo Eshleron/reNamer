@@ -16,7 +16,6 @@ TODO Renaming folders
 import sys
 import os
 from pathlib import Path
-from tkinter import filedialog
 import random
 import time
 from threading import Thread
@@ -35,20 +34,49 @@ class MainApplication(gui.MainWindow):
     def __init__(self, parent=None):
         super(MainApplication, self).__init__(parent)
 
-        self.ui.launch.clicked.connect(self.rename_files)
+        # self.ui.launch.clicked.connect(self.printing)
         self.ui.pick_folder.clicked.connect(self.folder_pick)
 
+        self.ui.rnd_name.toggled.connect(self.random_file_name)
+        self.ui.not_rnd_name.toggled.connect(self.not_random_file_name)
+
+        self.ui.file_type.toggled.connect(self.type_name)
+        self.ui.file_set_name.toggled.connect(self.increment_name)
         """Binds"""
         # self.russian_lang.triggered.connect(self.rus_language)
         # self.english_lang.triggered.connect(self.eng_language)
 
-        # self.pick_folder.bind("<Button-1>", lambda b: self.folder_pick())
         """Vars"""
-        self.name = 0
-        self.timer = 0
-        # self.folder_path = ''
+        self.name = ''
+        self.start_value = 0
+        self.increment = 0
         self.folder = ''
         self.extensions_dict = {}
+        self.file_list = []
+        self.qty_files = 0
+
+    def random_file_name(self):
+        self.ui.file_type.setCheckable(False)
+        self.ui.file_type.setEnabled(False)
+        self.ui.file_init_name.setCheckable(False)
+        self.ui.file_init_name.setEnabled(False)
+        self.ui.file_set_name.setCheckable(False)
+        self.ui.file_set_name.setEnabled(False)
+        self.ui.launch.clicked.connect(self.random_rename)
+
+    def not_random_file_name(self):
+        self.ui.file_type.setCheckable(True)
+        self.ui.file_type.setEnabled(True)
+        self.ui.file_init_name.setCheckable(True)
+        self.ui.file_init_name.setEnabled(True)
+        self.ui.file_set_name.setCheckable(True)
+        self.ui.file_set_name.setEnabled(True)
+
+    def type_name(self):
+        self.ui.launch.clicked.connect(self.type_rename)
+
+    def increment_name(self):
+        self.ui.launch.clicked.connect(self.increment_rename)
 
     def unique_file_name(self, extension):
         try:
@@ -62,68 +90,73 @@ class MainApplication(gui.MainWindow):
 
     def folder_pick(self):
         self.folder = str(QFileDialog.getExistingDirectory(self.ui, "Select Directory"))
+        self.check_folder()
+
+    def check_folder(self):
+        self.file_list = []
+        self.extensions_dict = {}
+
         if self.folder:
-            self.ui.show_path.setText(self.folder)
+            for file in os.walk(self.folder):
+                self.file_list.append(file)
 
-    def find_extension(self, file):
-        return str(Path(file).suffix)
-        # import os
-        # filename, extension = os.path.splitext(file)
-        # return extension
+            for address, dirs, files in self.file_list:
+                for file in files:
+                    self.qty_files += 1
+            # print(self.file_list)
+            if len(self.file_list[0]) == 0 and len(self.file_list[0]):
+                self.ui.show_path.setStyleSheet('color: orange')
+                self.ui.show_path.setText('Nothing in \n ', self.folder)
+            else:
+                self.ui.show_path.setStyleSheet('color: green')
+                self.ui.show_path.setText(self.folder)
 
-    def rename_files(self):
-        # self.extensions_dict = {}
+    def broad_rename(self, name='', start_value='', increment='', func=''):
+        self.check_folder()
 
-        file_list = []
-        for file in os.walk(self.folder):
-            file_list.append(file)
+        if name != '':
+            self.name = name
+        if start_value != '':
+            self.start_value = int(start_value)
+        if increment != '':
+            self.increment = int(increment)
 
-        for address, dirs, files in file_list:
+        for address, dirs, files in self.file_list:
             for file in files:
-                extension = self.find_extension(file)
+                extension = str(Path(file).suffix)
                 folder_path = address + '/'
                 obj = folder_path + file
 
-                self.unique_file_name(extension)
-                os.rename(obj, folder_path + str(self.name) + extension)
-                time.sleep(self.timer)
+                if func == 'type':
+                    self.unique_file_name(extension)
+                elif func == 'rnd':
+                    self.name = str(random.randint(100000, 10000000))
+                elif func == 'increment':
+                    self.start_value += self.increment
+                elif func == 'initial':
+                    pass
 
-    # def rename(self):
-    #     self.extentions_dict = {}
-    #     self.name = 0
-    #     try:
-    #         if self.wait_timer.get() != '':
-    #             self.timer = float(self.wait_timer.get())
-    #
-    #         file_list = []
-    #         for file in os.walk(self.folder):
-    #             file_list.append(file)
-    #             print(file_list)
-    #
-    #         for address, dirs, files in file_list:
-    #             for file in files:
-    #                 extention = self.find_extention(file)
-    #
-    #                 self.path = address + '/'
-    #                 obj = self.path + file
-    #
-    #                 selection_type = self.rb_var.get()
-    #                 selection_rnd = self.random_var.get()
-    #                 if selection_rnd == 1:
-    #                     os.rename(obj, self.path + str(random.randint(1000, 1000000)) + extention)
-    #                     time.sleep(self.timer)
-    #                 else:
-    #                     if selection_type == 1:
-    #                         self.unique_file_name(extention)
-    #                         os.rename(obj, self.path + str(self.name) + extention)
-    #                         time.sleep(self.timer)
-    #                     else:
-    #                         os.rename(obj, self.path + str(self.name) + extention)
-    #                         self.name += 1
-    #                         time.sleep(self.timer)
-    #
-    #     except FileExistsError:
-    #         print("\x1b[31mFileExistsError---Файл уже существует!\x1b[0m")
+                try:
+                    os.rename(obj, folder_path + str(self.name) + str(self.start_value) + extension)
+                except FileNotFoundError:
+                    QMessageBox.about(self.ui, "File not found.", "Choose folder again.")
+                except FileExistsError:
+                    QMessageBox.about(self.ui, "Файл уже существует.", "Выберете папку заново.")
+                except:
+                    QMessageBox.warning(self.ui, "Неизвестная ошибка.", "Перезапустите программу.")
+                    raise
+
+    def type_rename(self):
+        self.broad_rename(func='type')
+
+    def random_rename(self):
+        self.broad_rename(func='rnd')
+
+    def increment_rename(self):
+        basis = self.ui.set_basis.text()
+        start_value = self.ui.set_start_value.text()
+        increment = self.ui.set_increment.text()
+        self.broad_rename(name=basis, start_value=start_value, increment=increment, func='increment')
 
 
 def main():
