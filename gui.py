@@ -1,82 +1,47 @@
 # -*- coding: utf-8 -*-
+"""
+reNamer, Author Svyatoslav Pankov(https://github.com/Eshleron/reNamer)
+
+Requirements:
+  - os
+  - pathlib
+  - random
+  - sys
+  - PyQt5
+
+Python:
+  - 3.5.4
+
+This file (gui.py) is part of reNamer.
+
+"""
 
 
-import ctypes
-
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QMessageBox, QFileDialog, QHBoxLayout, \
-    QFormLayout, QWidget, QScrollArea, QVBoxLayout, QPushButton, QLabel, QLineEdit, QRadioButton, QButtonGroup
-from PyQt5.QtGui import QIcon, QImage, QPalette, QBrush, QFont
-from PyQt5.QtCore import QSize, Qt, QRect
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon, QImage, QPalette, QBrush
+from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, \
+    QRadioButton, QButtonGroup, QProgressBar
 
 
 class MainWindow(QMainWindow):
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        self.setWindowTitle("Main window")
-        self.setWindowIcon(QIcon('logo.png'))
+        self.setWindowTitle("reNamer by Svyatoslav Pankov")
+        self.setWindowIcon(QIcon('media\icons\logo.png'))
         self.width = 400
         self.height = 470
         MainWindow.resize(self, self.width, self.height)
 
-        """Menu"""
-        self.mainMenu = self.menuBar()
-        langMenu = self.mainMenu.addMenu('Language')
-        """Menu actions"""
-        self.russian_lang = QAction(QIcon('RUS.png'), 'Russian', self)
-        self.russian_lang.setShortcut('Ctrl+N')
-        self.english_lang = QAction(QIcon('ENG.png'), 'English', self)
-        self.english_lang.setShortcut('Ctrl+N')
-        # langMenu.addAction(self.russian_lang)
-        # langMenu.addAction(self.english_lang)
+        bg_image = 'media\Wallpaper_scaled.jpg'
+        image = QImage(bg_image)
+        palette = QPalette()
+        palette.setBrush(10, QBrush(image))
+        self.setPalette(palette)
 
         """CentralWidget"""
         self.ui = UserInterface(self)
         self.setCentralWidget(self.ui)
-
-        """Vars"""
-        # self.rb_var = IntVar()
-        # self.random_var = IntVar()
-        """Dictionary ENG-RUS"""
-        self.eng_language_list = ['Start', 'Choose the folder', 'Time between changing the names',
-                                  'Chosen path to the folder is: ',
-                                  'Choose a few naming options', 'Random file name', 'Not random file name', 'and those',
-                                  'Depends on file type', 'Depends on initial file name']
-
-        self.eng_rus_dictionary = {'Start': 'Запуск',
-                                   'Choose the folder': 'Выберете папку',
-                                   'Time between changing the names': 'Время между сменой названий файлов',
-                                   'Chosen path to the folder is: ': 'Путь к выбранной папке: ',
-                                   'Choose a few naming options': 'Выберете необходимые настройки',
-                                   'Random file name': 'Случайное имя файла',
-                                   'Not random file name': 'Не случайное имя файла',
-                                   'and those': 'еще настройки',
-                                   'Depends on file type': 'Имя зависит от типа файла',
-                                   'Depends on initial file name': 'Имя зависит от изначального имени файла'}
-
-    def eng_language(self):
-        self.launch.configure(text=self.eng_language_list[0])
-        self.pick_folder.configure(text=self.eng_language_list[1])
-        self.time_label.configure(text=self.eng_language_list[2])
-        self.path_hint_label.configure(text=self.eng_language_list[3])
-        self.pass1_label.configure(text=self.eng_language_list[4])
-        self.random_name_rb.configure(text=self.eng_language_list[5])
-        self.not_random_name_rb.configure(text=self.eng_language_list[6])
-        self.pass2_label.configure(text=self.eng_language_list[7])
-        self.file_type_rb.configure(text=self.eng_language_list[8])
-        self.file_name_rb.configure(text=self.eng_language_list[9])
-
-    def rus_language(self):
-        self.launch.configure(text=self.eng_rus_dictionary[self.eng_language_list[0]])
-        self.pick_folder.configure(text=self.eng_rus_dictionary[self.eng_language_list[1]])
-        self.time_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[2]])
-        self.path_hint_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[3]])
-        self.pass1_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[4]])
-        self.random_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[5]])
-        self.not_random_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[6]])
-        self.pass2_label.configure(text=self.eng_rus_dictionary[self.eng_language_list[7]])
-        self.file_type_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[8]])
-        self.file_name_rb.configure(text=self.eng_rus_dictionary[self.eng_language_list[9]])
 
 
 class UserInterface(QWidget):
@@ -88,14 +53,14 @@ class UserInterface(QWidget):
 
     def __controls(self):
         """
-        Creating UI elements
+        Creating UI elements.
         """
 
         """Buttons"""
         self.launch = PushButton('Launch', 'Click to launch')
         self.pick_folder = PushButton('Pick Folder')
         self.path_hint = Label('Chosen path to the folder is: ')
-        self.show_path = Label()  # Green
+        self.show_path = Label()
         self.choice_1 = Label('Choose a few naming options')
 
         """RadioButtons first group"""
@@ -111,21 +76,24 @@ class UserInterface(QWidget):
 
         """RadioButtons second group"""
         self.file_type = RadioButton('Depends on file type')
-        self.file_init_name = RadioButton('Depends on initial file name')
         self.file_set_name = RadioButton('Set file name')
 
         self.button_group_2 = QButtonGroup()
         self.button_group_2.addButton(self.file_type)
-        self.button_group_2.addButton(self.file_init_name)
         self.button_group_2.addButton(self.file_set_name)
 
         self.set_basis = LineEdit(placeholder='Set basis')
         self.set_start_value = LineEdit(placeholder='Set start value')
         self.set_increment = LineEdit(placeholder='Set increment')
+        self.set_basis.setEnabled(False)
+        self.set_start_value.setEnabled(False)
+        self.set_increment.setEnabled(False)
+
+        self.progress_bar = ProgressBar()
 
     def __layout(self):
         """
-        Arranging UI elements
+        Arranging UI elements.
         """
 
         layout_v = QVBoxLayout()
@@ -138,11 +106,11 @@ class UserInterface(QWidget):
         layout_v.addWidget(self.not_rnd_name, 1, Qt.AlignTop)
         layout_v.addWidget(self.choice_2, 1, Qt.AlignTop)
         layout_v.addWidget(self.file_type, 1, Qt.AlignTop)
-        layout_v.addWidget(self.file_init_name, 1, Qt.AlignTop)
         layout_v.addWidget(self.file_set_name, 1, Qt.AlignTop)
         layout_v.addWidget(self.set_basis, 1, Qt.AlignTop)
         layout_v.addWidget(self.set_start_value, 1, Qt.AlignTop)
         layout_v.addWidget(self.set_increment, 1, Qt.AlignTop)
+        layout_v.addWidget(self.progress_bar, 1, Qt.AlignBottom)
         layout_v.addWidget(self.launch, 2, Qt.AlignBottom)
 
         layout_h = QHBoxLayout()
@@ -195,11 +163,8 @@ class RadioButton(QRadioButton):
         self.setText(self.text)
         self.setToolTip(self.tooltip)
 
-#         '''Size of the MainWindow'''
-#         user32 = ctypes.windll.user32
-#         screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-#         self.width = int(screensize[0] / 2)
-#         self.height = int(screensize[1] - 100)
-#         self.setGeometry(screensize[0] - self.width, 30, self.width, self.height)
-#
-#
+
+class ProgressBar(QProgressBar):
+    def __init__(self):
+        QProgressBar.__init__(self)
+        self.setTextVisible(False)
