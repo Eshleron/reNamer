@@ -1,12 +1,11 @@
+# reNamer
+reNamer lets you rename files depending on their extension.
 
-reNamer, Author Svyatoslav Pankov(https://github.com/Eshleron/reNamer)
+## How it works
+![alt text](https://github.com/Eshleron/reNamer/blob/master/media/Example.PNG?raw=true)
 
-Requirements:
-  - os
-  - pathlib
-  - random
-  - sys
-  - PyQt5
+For every .extension in the target folder reNamer sets unique enumeration.
 
-Python:
-  - 3.5.4
+### Prerequisites:
+The only dependency that needs to be installed is PyQt5 compatible with Python 3.5.4. 
+All other libraries used in this project are preinstalled in Python.
