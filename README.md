@@ -12,7 +12,7 @@ reNamer allows you to rename files these ways:
 
 ![alt text](https://github.com/Eshleron/reNamer/blob/master/media/Examples/random_example.JPG?raw=true)
 
-- With your set of parametrs. Example, name=FILE, start counting from=10, step=1
+- With your set of parameters. Example, name=FILE, start counting from=10, step=1
 
 ![alt text](https://github.com/Eshleron/reNamer/blob/master/media/Examples/FILE_example.JPG?raw=true)
 
