@@ -21,7 +21,7 @@ reNamer allows you to rename files these ways:
  And simply you have a lot of files and you need the same pattern to rename them.
  
 ## If you want .exe just to use it?
-https://mega.nz/#F!nhlBAKDD!Kr5Gu95DVIlKI3rMU42Hhw 
+https://mega.nz/#!u9FBnCBS!7nImTAQ0aZ38Uh5iPbZXV6qiNrapyy_XooAbFiMZwHE 
 
 ### Prerequisites:
 The only dependency that needs to be installed to run it is PyQt5 compatible with Python 3.5.4. 
