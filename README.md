@@ -16,6 +16,10 @@ reNamer allows you to rename files these ways:
 
 ![alt text](https://github.com/Eshleron/reNamer/blob/master/media/Examples/FILE_example.JPG?raw=true)
 
+## Where can use it?
+ You can use that as a tool to rename you training dataset file.
+ And simply you have a lot of files and you need the same pattern to rename them.
+ 
 ### Prerequisites:
 The only dependency that needs to be installed is PyQt5 compatible with Python 3.5.4. 
 All other libraries used in this project are preinstalled in Python.
