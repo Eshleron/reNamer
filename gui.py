@@ -63,7 +63,7 @@ class UserInterface(QWidget):
         self.pick_folder = PushButton('Pick Folder')
         self.path_hint = Label('Chosen path to the folder is: ')
         self.show_path = Label()
-        self.show_extensions = Label('LOL')
+        self.show_extensions = Label('')
         self.show_extensions.hide()
         self.choice_1 = Label('Choose a few naming options')
 
