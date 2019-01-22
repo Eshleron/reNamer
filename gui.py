@@ -3,10 +3,12 @@
 reNamer, Author Svyatoslav Pankov(https://github.com/Eshleron/reNamer)
 
 Requirements:
+  - json
   - os
   - pathlib
   - random
   - sys
+  - time
   - PyQt5
 
 Python:
@@ -61,6 +63,8 @@ class UserInterface(QWidget):
         self.pick_folder = PushButton('Pick Folder')
         self.path_hint = Label('Chosen path to the folder is: ')
         self.show_path = Label()
+        self.show_extensions = Label('LOL')
+        self.show_extensions.hide()
         self.choice_1 = Label('Choose a few naming options')
 
         """RadioButtons first group"""
@@ -101,6 +105,7 @@ class UserInterface(QWidget):
         layout_v.addWidget(self.pick_folder, 1, Qt.AlignTop)
         layout_v.addWidget(self.path_hint, 1, Qt.AlignCenter)
         layout_v.addWidget(self.show_path, 1, Qt.AlignCenter)
+        layout_v.addWidget(self.show_extensions, 1, Qt.AlignCenter)
         layout_v.addWidget(self.choice_1, 1, Qt.AlignTop)
         layout_v.addWidget(self.rnd_name, 1, Qt.AlignTop)
         layout_v.addWidget(self.not_rnd_name, 1, Qt.AlignTop)
