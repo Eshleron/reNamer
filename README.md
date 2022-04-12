@@ -19,9 +19,6 @@ reNamer allows you to rename files these ways:
 ## Where can use it?
  You can use that as a tool to rename you training dataset files.
  And simply you have a lot of files and you need the same pattern to rename them.
- 
-## If you want .exe just to use it?
-https://mega.nz/#!35UGwCCD!zUn_Jg8pvimJgFV0DbgBzGpbPXRasqBTCGHnCjYgan8 
 
 ### Prerequisites:
 The only dependency that needs to be installed to run it is PyQt5 compatible with Python 3.5.4. 
